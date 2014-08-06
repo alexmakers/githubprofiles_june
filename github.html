@@ -10,24 +10,25 @@
     </form>
 
     <div class='profile-container'>
-      <div class="profile">
-        <div class="left">
-          <img src="https://avatars.githubusercontent.com/u/5008648?">
-        </div>
 
-        <div class="right">
-          <h3>
-            <a href="https://github.com/alexmakers">
-              alexmakers
-            </a>
-          </h3>
-          <h4>Repos: 35</h4>
-          <h4>Followers: 49</h4>
-        </div>
-        <br clear="all">
-      </div>
     </div>
 
     <script src='https://code.jquery.com/jquery-2.0.3.min.js'></script>
+    <script>
+      $(document).ready(function(){
+        $('#add_profile').on('submit', function(event){
+          event.preventDefault();
+          var url = 'https://api.github.com/users/' + $('#username').val();
+
+          $.get(url, function(user){
+            $('<div class="profile"><div class="left"><img src="' + user.avatar_url + '"></div><div class="right"><h3><a href="' + user.html_url + '">' + user.login + '</a></h3><h4>Repos: ' + user.public_repos + '</h4><h4>Followers: ' + user.followers + '</h4></div><br clear="all"></div>').prependTo('.profile-container').slideDown();
+          }).fail(function(){
+            alert('Could not find the user called ' + $('#username').val());
+          }).always(function(){
+            $('#username').val('');
+          })
+        });
+      });
+    </script>
   </body>
 </html>
